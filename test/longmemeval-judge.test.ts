@@ -215,7 +215,7 @@ describe('judge-runner — retries, error classes, usage, cost', () => {
   const noSleep = { backoffMs: 500, sleep: async () => {} };
 
   test('a clean yes → verdict correct with usage, priced cost > 0, and the API snapshot id', async () => {
-    const { fn, calls } = scriptedClient([okResult('Yes', { responseModel: 'gpt-4o-2024-08-06' })]);
+    const { fn, calls } = scriptedClient([okResult('Yes', { responseModel: 'gpt-6-luna' })]);
     const out = await runJudge({ client: fn, model: DEFAULT_JUDGE_MODEL, prompt: 'P', maxTokens: JUDGE_MAX_TOKENS, temperature: 0, parse: classifyJudgeResponse, ...noSleep });
     expect(out.kind).toBe('verdict');
     if (out.kind !== 'verdict') throw new Error('unreachable');
@@ -224,7 +224,7 @@ describe('judge-runner — retries, error classes, usage, cost', () => {
     expect(out.usage).toEqual({ input_tokens: 200, output_tokens: 2 });
     expect(out.cost_usd).toBeGreaterThan(0);
     expect(out.cost_usd).toBeCloseTo((200 / 1e6) * 2.5 + (2 / 1e6) * 10, 12);
-    expect(out.response_model).toBe('gpt-4o-2024-08-06');
+    expect(out.response_model).toBe('gpt-6-luna');
     expect(out.raw).toBe('Yes');
     // The official call shape: one user message, temperature 0; max_tokens 16 (provider minimum; official 10).
     expect(calls[0].messages).toEqual([{ role: 'user', content: 'P' }]);

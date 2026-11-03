@@ -102,8 +102,8 @@ describe('generateAnswer context construction', () => {
 
   test('response_model is the provider-reported snapshot when it differs from the requested id, null when it echoes', async () => {
     const results = [hit('chat/a', 'body')];
-    const snapshot = await generateAnswer(client('n/a', { reportedModel: 'gpt-4o-2024-08-06' }).c, { question: 'q' }, results, [], new Map(), 'openai:gpt-4o');
-    expect(snapshot.response_model).toBe('gpt-4o-2024-08-06');
+    const snapshot = await generateAnswer(client('n/a', { reportedModel: 'gpt-6-luna' }).c, { question: 'q' }, results, [], new Map(), 'openai:gpt-4o');
+    expect(snapshot.response_model).toBe('gpt-6-luna');
     const echoed = await generateAnswer(client('n/a').c, { question: 'q' }, results, [], new Map(), 'openai:gpt-4o');
     expect(echoed.response_model).toBeNull();
   });

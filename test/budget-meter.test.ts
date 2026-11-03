@@ -129,7 +129,7 @@ describe('BudgetMeter', () => {
     const meter = new BudgetMeter({ budgetUsd: 0.001, phase: 'auto_think', auditPath });
     meter.check({ modelId: 'claude-opus-4-7', estimatedInputTokens: 5000, maxOutputTokens: 4000, label: 'a' });
     meter.check({ modelId: 'claude-opus-4-7', estimatedInputTokens: 5000, maxOutputTokens: 4000, label: 'b-denied' });
-    meter.check({ modelId: 'gpt-5', estimatedInputTokens: 1000, maxOutputTokens: 1000, label: 'c-unpriced' });
+    meter.check({ modelId: 'gpt-5.6-sol', estimatedInputTokens: 1000, maxOutputTokens: 1000, label: 'c-unpriced' });
     const lines = readLedger();
     expect(lines).toHaveLength(3);
     expect(lines[0].event).toBe('submit_denied'); // first opus call exceeds the $0.001 cap
@@ -148,7 +148,7 @@ describe('BudgetMeter', () => {
     const meter = new BudgetMeter({ budgetUsd: 0.01, phase: 'auto_think', auditPath });
     meter.check({ modelId: 'claude-haiku-4-5-20251001', estimatedInputTokens: 1000, maxOutputTokens: 1000, label: 'verdict' }); // submit
     meter.check({ modelId: 'claude-opus-4-7', estimatedInputTokens: 5000, maxOutputTokens: 10000, label: 'big-call' });          // submit_denied
-    meter.check({ modelId: 'gpt-5', estimatedInputTokens: 1000, maxOutputTokens: 1000, label: 'unpriced' });                     // submit_unpriced
+    meter.check({ modelId: 'gpt-5.6-sol', estimatedInputTokens: 1000, maxOutputTokens: 1000, label: 'unpriced' });                     // submit_unpriced
     const lines = readLedger();
     expect(lines).toHaveLength(3);
 

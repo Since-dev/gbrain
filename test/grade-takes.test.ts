@@ -512,7 +512,7 @@ describe('judge model follows the gateway chat model (label = actual)', () => {
     // with a different chat_model, the cache and telemetry recorded a model
     // that never ran.
     const { configureGateway, resetGateway } = await import('../src/core/ai/gateway.ts');
-    configureGateway({ chat_model: 'openai:gpt-5', env: { OPENAI_API_KEY: 'test-key' } });
+    configureGateway({ chat_model: 'openai:gpt-5.6-sol', env: { OPENAI_API_KEY: 'test-key' } });
     try {
       const takes = [buildTake({ id: 1, sinceDate: '2023-01-01' })];
       const { engine, captured } = buildMockEngine({ takes });
@@ -524,14 +524,14 @@ describe('judge model follows the gateway chat model (label = actual)', () => {
       const evidenceRetriever: EvidenceRetrieverFn = async () => 'evidence body';
       const result = await runPhaseGradeTakes(buildCtx(engine), { judge, evidenceRetriever });
       expect(result.status).toBe('ok');
-      expect(hints).toEqual(['openai:gpt-5']); // the chat call gets the FULL string
+      expect(hints).toEqual(['openai:gpt-5.6-sol']); // the chat call gets the FULL string
       const inserts = captured.filter(c => c.sql.includes('INSERT INTO take_grade_cache'));
       expect(inserts).toHaveLength(1);
-      expect(inserts[0]!.params[2]).toBe('gpt-5'); // stored judge_model_id is the bare tail
+      expect(inserts[0]!.params[2]).toBe('gpt-5.6-sol'); // stored judge_model_id is the bare tail
       // The evidence signature is keyed on the same bare tail, so a stock
       // install (default chat model tail == the old hardcoded value) sees
       // zero cache invalidation from this change.
-      expect(inserts[0]!.params[3]).toBe(evidenceSignature('evidence body', 'gpt-5'));
+      expect(inserts[0]!.params[3]).toBe(evidenceSignature('evidence body', 'gpt-5.6-sol'));
     } finally {
       resetGateway();
     }
