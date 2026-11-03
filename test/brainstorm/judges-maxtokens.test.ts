@@ -64,10 +64,9 @@ describe('computeJudgeMaxTokens (pure formula)', () => {
     expect(computeJudgeMaxTokens(500, 'claude-fable-5-1')).toBe(64_000);
   });
 
-  test('96 ideas on legacy Haiku 3.5 (8K cap): CAP binds at 8192 (D11 codex fix)', () => {
-    // 96 * 150 + 500 = 14_900 > 8192; legacy 3.5 caps at 8K — without
-    // ANTHROPIC_OUTPUT_CAPS this would have been the next opaque HTTP 400.
-    expect(computeJudgeMaxTokens(96, 'claude-3-5-haiku-20241022')).toBe(8_192);
+  test('500 ideas on Haiku 4.5 (64K cap): CAP binds at 64_000', () => {
+    // 500 * 150 + 500 = 75_500 > 64_000.
+    expect(computeJudgeMaxTokens(500, 'claude-haiku-4-5-20251001')).toBe(64_000);
   });
 
   test('unknown model: falls back to MAX_OUTPUT_TOKENS_CEIL', () => {
@@ -88,8 +87,8 @@ describe('computeJudgeMaxTokens (pure formula)', () => {
 
   test('slash-prefixed id resolves through splitProviderModelId (THE FIX combined with site routing)', () => {
     expect(computeJudgeMaxTokens(96, 'anthropic/claude-opus-4-7')).toBe(96 * 150 + 500);
-    // Legacy 3.5 via slash form still hits the 8K cap.
-    expect(computeJudgeMaxTokens(96, 'anthropic/claude-3-5-haiku-20241022')).toBe(8_192);
+    // Haiku 4.5 via slash form still hits the 64K cap.
+    expect(computeJudgeMaxTokens(500, 'anthropic/claude-haiku-4-5-20251001')).toBe(64_000);
   });
 
   test('every entry in ANTHROPIC_OUTPUT_CAPS is reachable by lookup', () => {
@@ -167,12 +166,14 @@ describe('runJudge wires computeJudgeMaxTokens into chat({maxTokens})', () => {
     // not have caught anything. Post-fix: slash-form is honored for the
     // per-model cap because computeJudgeMaxTokens routes through parseModelId.
     const captured: ChatOpts[] = [];
-    await runJudge(BRAINSTORM_JUDGE_CONFIG, makeIdeas(96), {
+    await runJudge(BRAINSTORM_JUDGE_CONFIG, makeIdeas(500), {
       chatFn: makeCapturingChatFn(captured),
-      modelOverride: 'anthropic/claude-3-5-haiku-20241022',
+      modelOverride: 'anthropic/claude-haiku-4-5-20251001',
+      maxIdeasPerCall: 500,
     });
-    // 14_900 formula > 8K legacy cap → cap binds.
-    expect(captured[0].maxTokens).toBe(8_192);
+    // 75_500 formula > 64K Haiku 4.5 cap → cap binds.
+    expect(captured.length).toBe(1);
+    expect(captured[0].maxTokens).toBe(64_000);
   });
 
   test('200-idea chunk size set via maxIdeasPerCall → maxTokens scales (single chunk)', async () => {
