@@ -39,14 +39,14 @@ describe('ChatOpts.temperature → generateText', () => {
   test('temperature 0 is passed verbatim (0 is not dropped as falsy) alongside maxOutputTokens', async () => {
     configureGateway({ env: { OPENAI_API_KEY: 'sk-fake' } });
     let captured: any;
-    __setGenerateTextTransportForTests(async (args: any) => { captured = args; return sdkResult({ response: { modelId: 'gpt-4o-2024-08-06' } }); });
+    __setGenerateTextTransportForTests(async (args: any) => { captured = args; return sdkResult({ response: { modelId: 'gpt-6-luna' } }); });
     const res = await chat({ model: 'openai:gpt-4o', messages: [{ role: 'user', content: 'Is it correct? yes or no' }], maxTokens: 10, temperature: 0 });
     expect(captured).toBeDefined();
     expect(captured.temperature).toBe(0);
     expect(captured.maxOutputTokens).toBe(10);
     // Requested id stays on `model`; the API snapshot rides `responseModel`.
     expect(res.model).toBe('openai:gpt-4o');
-    expect(res.responseModel).toBe('gpt-4o-2024-08-06');
+    expect(res.responseModel).toBe('gpt-6-luna');
     expect(res.text).toBe('yes');
   });
 
