@@ -72,11 +72,9 @@ export const ANTHROPIC_OUTPUT_CAPS: Record<string, number> = {
   'claude-sonnet-4-6': 64_000,
   'claude-haiku-4-5': 64_000,
   'claude-haiku-4-5-20251001': 64_000,
-  // Legacy 3.5 generation caps at 8,192 — much smaller. Without these
-  // entries, a `--judge-model anthropic:claude-3-5-haiku-20241022` with
-  // 96 ideas would request 14,900 tokens > 8K cap → HTTP 400.
-  'claude-3-5-sonnet-20241022': 8_192,
-  'claude-3-5-haiku-20241022': 8_192,
+  // The retired 3.5 generation (claude-3-5-sonnet-20241022,
+  // claude-3-5-haiku-20241022) moved to claude-sonnet-5-5 and
+  // claude-haiku-4-5-20251001, whose entries are above.
 };
 
 /**
