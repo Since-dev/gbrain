@@ -1489,9 +1489,7 @@ function instantiateEmbedding(recipe: Recipe, modelId: string, cfg: AIGatewayCon
       );
       const baseURL = resolveNativeBaseUrl('google', cfg);
       const client = createGoogleGenerativeAI({ apiKey, ...(baseURL ? { baseURL } : {}) });
-      return (client as any).textEmbeddingModel
-        ? (client as any).textEmbeddingModel(modelId)
-        : (client as any).embedding(modelId);
+      return client.embeddingModel(modelId);
     }
     case 'native-anthropic':
       throw new AIConfigError(
