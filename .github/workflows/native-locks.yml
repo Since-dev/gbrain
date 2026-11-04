@@ -41,7 +41,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24.18.0
@@ -81,7 +81,7 @@ jobs:
       - name: Record the job deadline
         shell: bash
         run: echo "GBRAIN_JOB_DEADLINE=$(( $(date +%s) + 15 * 60 ))" >> "$GITHUB_ENV"
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       # A wedged darwin-x64 runner uploads no log at all (#7457's cell, #7419, #7303, #7238), so a background loop posts
       # the current step or suite, free memory, swap, load and the busiest process names as the commit status
       # diag/native-heartbeat/<cell>; GitHub keeps every status, so the last one before a wedge survives it. Nothing on a
@@ -101,7 +101,7 @@ jobs:
         timeout-minutes: 8
         run: bun scripts/ci-bun-install.ts --frozen-lockfile --ignore-scripts
       # The pinned Zig archive, cached per runner OS/arch (setup-toolchain.ts re-verifies its sha256).
-      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             ${{ runner.temp }}/gbrain-zig/zig-*.zip
@@ -220,7 +220,7 @@ jobs:
       contents: read
       statuses: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         with:
           persist-credentials: false
           sparse-checkout: scripts/native/heartbeat-finalize.ts
@@ -251,7 +251,7 @@ jobs:
         runner: [windows-2022, windows-11-arm]
         bun: ['1.4.4']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         timeout-minutes: 2
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         timeout-minutes: 2
@@ -285,7 +285,7 @@ jobs:
         runner: [windows-2022, windows-11-arm]
         bun: ['1.4.4']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         timeout-minutes: 2
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         timeout-minutes: 2
@@ -319,12 +319,12 @@ jobs:
         bun: ['1.4.4']
         target: [linux-x64-musl, linux-arm64-musl]
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
       # The pinned Zig archive, cached per runner OS/arch (setup-toolchain.ts re-verifies its sha256).
-      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             ${{ runner.temp }}/gbrain-zig/zig-*.zip

@@ -69,11 +69,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -81,7 +81,7 @@ jobs:
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # run-e2e.sh builds it when absent/stale — this just avoids paying the
       # build once per job. KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -128,7 +128,7 @@ jobs:
         run: bash scripts/run-with-receipt.sh jsonb-parity guard -- bun test --timeout=60000 test/e2e/op-checkpoint-jsonb-parity.test.ts test/e2e/jsonb-roundtrip.test.ts test/phantom-redirect-engine-parity.test.ts
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-jsonb-parity
           path: ${{ runner.temp }}/receipts
@@ -153,7 +153,7 @@ jobs:
       reuse: ${{ steps.reuse.outputs.reuse }}
       reuse-source-run-id: ${{ steps.reuse.outputs.source_run_id }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: 1.4.4
@@ -167,7 +167,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: bun scripts/ci-reuse.ts --workflow e2e --sha "$GITHUB_SHA" --repo "$GITHUB_REPOSITORY" --output "$GITHUB_OUTPUT" --summary "$GITHUB_STEP_SUMMARY" --record "$RUNNER_TEMP/reuse.json"
       - if: steps.reuse.outputs.reuse == 'true'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: reused-full-suite
           path: ${{ runner.temp }}/reuse.json
@@ -203,7 +203,7 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
           printf '%s\n' "$matrix" > "$RUNNER_TEMP/e2e-selection.json"
       - name: Upload frozen selection
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: e2e-selection
           path: ${{ runner.temp }}/e2e-selection.json
@@ -237,11 +237,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -249,7 +249,7 @@ jobs:
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # run-e2e.sh builds it when absent/stale — this just avoids paying the
       # build once per job. KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -279,7 +279,7 @@ jobs:
           : > "$RUNNER_TEMP/receipts/e2e--declared-empty--primary.files"
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-e2e-${{ matrix.shard }}
           path: ${{ runner.temp }}/receipts
@@ -288,7 +288,7 @@ jobs:
           overwrite: true
       - name: Upload E2E timing log
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: timings-e2e-${{ matrix.shard }}
           path: ${{ runner.temp }}/e2e.log
@@ -334,11 +334,11 @@ jobs:
         ports:
           - 55433:5432
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -346,7 +346,7 @@ jobs:
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # run-e2e.sh builds it when absent/stale — this just avoids paying the
       # build once per job. KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -448,7 +448,7 @@ jobs:
           GBRAIN_TEST_RECEIPT_DIR: ${{ runner.temp }}/receipts
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-tier1
           path: ${{ runner.temp }}/receipts
@@ -502,7 +502,7 @@ jobs:
         ports:
           - 55433:5432
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -536,7 +536,7 @@ jobs:
         run: bun scripts/require-executed-tests.ts "$RUNNER_TEMP/receipts" tier1
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-tier1-graduation-${{ matrix.shard }}
           path: ${{ runner.temp }}/receipts
@@ -594,11 +594,11 @@ jobs:
         ports:
           - 55433:5432
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -606,7 +606,7 @@ jobs:
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # run-e2e.sh builds it when absent/stale — this just avoids paying the
       # build once per job. KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -638,7 +638,7 @@ jobs:
           SHARD: ${{ matrix.shard }}/2
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-tier1-backend-matrix-${{ matrix.shard }}
           path: ${{ runner.temp }}/receipts
@@ -673,18 +673,18 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
           restore-keys: bun-cache-${{ runner.os }}-
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -712,7 +712,7 @@ jobs:
           GBRAIN_TEST_RECEIPT_LANE: postgres15-compat
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-postgres15-compat
           path: ${{ runner.temp }}/receipts
@@ -759,11 +759,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -771,7 +771,7 @@ jobs:
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
       # run-e2e.sh builds it when absent/stale — this just avoids paying the
       # build once per job. KEY: byte-identical with the homes in test.yml.
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -832,7 +832,7 @@ jobs:
         run: bun scripts/require-executed-tests.ts "$RUNNER_TEMP/receipts" tier2
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-tier2
           path: ${{ runner.temp }}/receipts
@@ -871,7 +871,7 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -886,7 +886,7 @@ jobs:
           GBRAIN_TEST_RECEIPT_LANE: full-unit
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-full-unit-${{ matrix.shard }}
           path: ${{ runner.temp }}/receipts
@@ -895,7 +895,7 @@ jobs:
           overwrite: true
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: coverage-full-shard-${{ matrix.shard }}
           path: ${{ runner.temp }}/coverage
@@ -931,7 +931,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -977,7 +977,7 @@ jobs:
     runs-on: ubicloud-standard-8-ubuntu-2404
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -991,7 +991,7 @@ jobs:
           GBRAIN_TEST_RECEIPT_LANE: full-serial
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-full-serial
           path: ${{ runner.temp }}/receipts
@@ -1000,7 +1000,7 @@ jobs:
           overwrite: true
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: coverage-full-serial
           path: ${{ runner.temp }}/coverage
@@ -1014,7 +1014,7 @@ jobs:
     runs-on: ubicloud-standard-4-ubuntu-2404
     timeout-minutes: 35
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -1038,7 +1038,7 @@ jobs:
             > "$RUNNER_TEMP/coverage/lane-manifest.json"
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: coverage-full-slow
           path: ${{ runner.temp }}/coverage
@@ -1070,12 +1070,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
       # PGLite snapshot (restore-only; test.yml's serial-tests job saves).
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             test/fixtures/pglite-snapshot.tar
@@ -1118,7 +1118,7 @@ jobs:
           GBRAIN_TEST_RECEIPT_LANE: full-e2e
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-full-e2e-${{ matrix.shard }}
           path: ${{ runner.temp }}/receipts
@@ -1135,7 +1135,7 @@ jobs:
         run: bash scripts/e2e-provider-key-notice.sh
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: coverage-full-e2e-${{ matrix.shard }}
           path: ${{ runner.temp }}/coverage
@@ -1144,7 +1144,7 @@ jobs:
           overwrite: true
       - name: Upload execution receipt
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: e2e-full-execution-${{ matrix.shard }}
           path: |
@@ -1166,7 +1166,7 @@ jobs:
       checks: read
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           fetch-depth: 0  # baseline gate reads git show origin/master:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
@@ -1176,7 +1176,7 @@ jobs:
         timeout-minutes: 8
         run: bun scripts/ci-bun-install.ts --frozen-lockfile
       - name: Download per-lane coverage artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           pattern: coverage-full-*
           path: ${{ runner.temp }}/coverage-artifacts
@@ -1215,7 +1215,7 @@ jobs:
         run: bun scripts/coverage-baseline-gate.ts --summary "$RUNNER_TEMP/coverage-full-merged/summary.json" --corpus fullCorpus | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Upload merged full-corpus coverage (trend artifact)
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: coverage-full-merged
           path: ${{ runner.temp }}/coverage-full-merged
@@ -1233,13 +1233,13 @@ jobs:
     runs-on: ubicloud-standard-2-ubuntu-2404
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
       - name: Download receipts
         continue-on-error: true
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           pattern: receipts-*
           path: ${{ runner.temp }}/receipts
@@ -1258,7 +1258,7 @@ jobs:
             --summary "$GITHUB_STEP_SUMMARY" --json "$RUNNER_TEMP/executed-identities.json" > /dev/null
       - name: Upload identity ledger
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: executed-identities
           path: ${{ runner.temp }}/executed-identities.json
@@ -1273,7 +1273,7 @@ jobs:
         run: bun scripts/ci-manifest.ts --receipts-dir "$RUNNER_TEMP/receipts" --out "$RUNNER_TEMP/ci-manifest.json" --summary "$GITHUB_STEP_SUMMARY"
       - name: Upload failure manifest
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ci-manifest
           path: ${{ runner.temp }}/ci-manifest.json
@@ -1350,7 +1350,7 @@ jobs:
             done
           fi
           echo "✓ all required e2e jobs succeeded"
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full_corpus)
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full_corpus)
@@ -1358,7 +1358,7 @@ jobs:
           bun-version: 1.4.4
       - name: Download nightly execution receipts
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full_corpus)
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           pattern: e2e-full-execution-*
           path: ${{ runner.temp }}/e2e-execution
@@ -1388,7 +1388,7 @@ jobs:
             echo "::error::e2e-full-suite requires e2e-status to succeed on this run (got $E2E_STATUS)"
             exit 1
           fi
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
           sparse-checkout: scripts/ci-full-suite-tree.sh
@@ -1397,7 +1397,7 @@ jobs:
       # comes from this run's manifest; without it the record carries no files.
       - name: Download the execution manifest
         continue-on-error: true
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           name: ci-manifest
           path: ${{ runner.temp }}/ci-manifest
@@ -1410,7 +1410,7 @@ jobs:
           WORKFLOW: ${{ github.workflow }}
           EVENT: ${{ github.event_name }}
         run: bash scripts/ci-full-suite-tree.sh
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: e2e-full-suite-tree
           path: ${{ runner.temp }}/full-suite/tree.json

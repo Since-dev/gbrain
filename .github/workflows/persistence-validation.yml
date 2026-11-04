@@ -41,7 +41,7 @@ jobs:
           --health-cmd "pg_isready -U gbrain_test -d gbrain_test"
           --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -55,7 +55,7 @@ jobs:
           bun --no-env-file scripts/persistence/performance.ts --engine=${{ matrix.engine }}
           --informational --manifest=.context/persistence-read-latency.json
       - if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: persistence-read-${{ matrix.engine }}-bun-${{ matrix.bun }}
           path: .context/persistence-read-latency.json
@@ -100,7 +100,7 @@ jobs:
           IGNORE_STARTUP_PARAMETERS: extra_float_digits,statement_timeout,idle_in_transaction_session_timeout,search_path
         ports: ['55433:5432']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -175,7 +175,7 @@ jobs:
           test/e2e/pgbouncer-transaction-pipeline-6930.test.ts
           test/e2e/extract-atoms-page-state.test.ts
       - if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: persistence-deployment-bun-${{ matrix.bun }}
           path: .context/persistence-runtime-matrix.json
@@ -232,7 +232,7 @@ jobs:
           --health-cmd "pg_isready -U gbrain_test -d gbrain_test"
           --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -257,7 +257,7 @@ jobs:
         run: bun scripts/postgres-unit-arms.ts run ${{ matrix.shard }} 19
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: receipts-pg-arms-${{ matrix.shard }}-bun-${{ matrix.bun }}
           path: ${{ runner.temp }}/receipts
@@ -294,7 +294,7 @@ jobs:
           --health-cmd "pg_isready -U gbrain_test -d gbrain_test"
           --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -314,7 +314,7 @@ jobs:
           --manifest=.context/persistence-manifest.json
       - name: Upload executed-case and latency manifest
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: persistence-${{ matrix.engine }}-bun-${{ matrix.bun }}
           path: .context/persistence-manifest.json
@@ -362,7 +362,7 @@ jobs:
           IGNORE_STARTUP_PARAMETERS: extra_float_digits,statement_timeout,idle_in_transaction_session_timeout,search_path
         ports: ['55433:5432']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -405,7 +405,7 @@ jobs:
           fi
       - name: Upload the crash-robot manifest
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: persistence-robot-${{ matrix.engine }}-bun-${{ matrix.bun }}
           path: .context/persistence-robot.json
@@ -440,7 +440,7 @@ jobs:
           --health-cmd "pg_isready -U gbrain_test -d gbrain_test"
           --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -464,7 +464,7 @@ jobs:
           fi
       - name: Upload receipts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: receipts-reconciliation-${{ matrix.engine }}-bun-${{ matrix.bun }}
           path: ${{ runner.temp }}/receipts
@@ -473,7 +473,7 @@ jobs:
           overwrite: true
       - name: Upload reconciliation crash manifests
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: reconciliation-${{ matrix.engine }}-bun-${{ matrix.bun }}
           path: .context/reconcile-crashes/*.json
@@ -527,7 +527,7 @@ jobs:
           IGNORE_STARTUP_PARAMETERS: extra_float_digits,statement_timeout,idle_in_transaction_session_timeout,search_path
         ports: ['55433:5432']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: ${{ matrix.bun }}
@@ -554,7 +554,7 @@ jobs:
         run: pkill -9 -f 'src/cli\.ts (serve|sync|put|call|extract)' || true
       - name: Upload the convergence fault evidence (plan, fired faults, every client, serve and writer log)
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: convergence-bun-${{ matrix.bun }}
           path: ${{ runner.temp }}/convergence
