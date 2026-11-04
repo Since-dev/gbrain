@@ -22,23 +22,23 @@ const hash = z.string().length(64).regex(/^[a-f0-9]{64}$/);
 const path = z.string().min(1).max(8192).refine(value => isAbsolute(value) && resolve(value) === value && !/[\x00-\x1f\x7f]/.test(value));
 const patterns = z.array(z.string().min(1).max(1024).refine(value => safeRepositoryPath(value) && !value.startsWith('!') && !value.endsWith('/')))
   .max(256).refine(values => values.every((value, index) => index === 0 || values[index - 1] < value));
-const schema = z.object({ name: z.literal('company-brain'), version: z.string().max(32).regex(/^\d+\.\d+\.\d+$/).refine(value => !/[\x00-\x1f\x7f]/.test(value)),
-  identity: z.string().max(192), resolved_digest: hash }).strict()
+const schema = z.strictObject({ name: z.literal('company-brain'), version: z.string().max(32).regex(/^\d+\.\d+\.\d+$/).refine(value => !/[\x00-\x1f\x7f]/.test(value)),
+  identity: z.string().max(192), resolved_digest: hash })
   .refine(value => value.identity.startsWith(`${value.name}@${value.version}+`) && value.identity.length === `${value.name}@${value.version}+`.length + 8 && /^[a-f0-9]{8}$/.test(value.identity.slice(-8)));
-const repository = z.object({ root: path, git_root: path, git_dir: path,
+const repository = z.strictObject({ root: path, git_root: path, git_dir: path,
   scope: z.string().max(8192).refine(value => value === '' || safeRepositoryPath(value)),
   root_device: z.string().regex(/^\d{1,24}$/), root_inode: z.string().regex(/^\d{1,24}$/),
-  git_device: z.string().regex(/^\d{1,24}$/), git_inode: z.string().regex(/^\d{1,24}$/), object_format: z.enum(['sha1', 'sha256']) }).strict()
+  git_device: z.string().regex(/^\d{1,24}$/), git_inode: z.string().regex(/^\d{1,24}$/), object_format: z.enum(['sha1', 'sha256']) })
   .refine(value => relative(value.git_root, value.root).split(sep).join('/') === value.scope);
-const profileSchema = z.object({
+const profileSchema = z.strictObject({
   version: z.literal(1), profile: z.literal('company-brain'), brainId: z.string().refine(isCompanyBrainId), databaseId: uuid,
   receiptId: uuid, planDigest: hash, repository,
-  selection: z.object({ include: patterns, exclude: patterns, defaults_version: z.literal(1) }).strict(),
-  limits: z.object({ maxEntries: z.number().int().min(1).max(COMPANY_BRAIN_MAX_ENTRIES),
-    maxMetadataBytes: z.number().int().min(1).max(COMPANY_BRAIN_MAX_METADATA_BYTES), maxFileBytes: z.number().int().min(1).max(COMPANY_BRAIN_MAX_FILE_BYTES) }).strict(),
+  selection: z.strictObject({ include: patterns, exclude: patterns, defaults_version: z.literal(1) }),
+  limits: z.strictObject({ maxEntries: z.number().int().min(1).max(COMPANY_BRAIN_MAX_ENTRIES),
+    maxMetadataBytes: z.number().int().min(1).max(COMPANY_BRAIN_MAX_METADATA_BYTES), maxFileBytes: z.number().int().min(1).max(COMPANY_BRAIN_MAX_FILE_BYTES) }),
   schema, extractorVersion: z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._+:-]{0,127}$/).refine(value => !/[\x00-\x1f\x7f]/.test(value)), approvedRevision: z.string().regex(/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/),
   committedOnly: z.literal(true), noPull: z.literal(true), noEmbed: z.literal(true), noBackfill: z.literal(true), noWriteback: z.literal(true),
-}).strict().refine(value => value.approvedRevision.length === (value.repository.object_format === 'sha1' ? 40 : 64));
+}).refine(value => value.approvedRevision.length === (value.repository.object_format === 'sha1' ? 40 : 64));
 
 export type CompanyBrainProfile = z.infer<typeof profileSchema>;
 

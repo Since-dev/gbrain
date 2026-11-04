@@ -31,15 +31,15 @@ export type PackPrimitive = typeof PACK_PRIMITIVES[number];
 
 const PackPrimitiveEnum = z.enum(PACK_PRIMITIVES);
 
-const LinkInferenceSchema = z.object({
+const LinkInferenceSchema = z.strictObject({
   regex: z.string().optional(),
   page_type: z.string().optional(),
   target_type: z.string().optional(),
   /** The regex labels body mentions found by NER only; markdown links fall through to the in-code matchers (#5882). */
   ner_only: z.boolean().optional(),
-}).strict();
+});
 
-const LinkTypeSchema = z.object({
+const LinkTypeSchema = z.strictObject({
   name: z.string().min(1),
   inverse: z.string().optional(),
   inference: LinkInferenceSchema.optional(),
@@ -52,7 +52,7 @@ const LinkTypeSchema = z.object({
   temporal: z.enum(['state', 'event']).optional(),
   /** `one_per_from`: a page holds at most one live relationship of this type; a newer dated start closes the older one (docs/guides/temporal-edges.md). */
   cardinality: z.enum(['many', 'one_per_from']).optional(),
-}).strict();
+});
 
 /**
  * v0.41.23 — ExtractableSpec widening. `extractable` is now `boolean | struct`.
@@ -71,7 +71,7 @@ const LinkTypeSchema = z.object({
  *
  * See plan D-EXTRACT-17/19/21/37/42/47 for the load-bearing decisions.
  */
-const ExtractableSpecSchema = z.object({
+const ExtractableSpecSchema = z.strictObject({
   /** Pack-supplied LLM prompt template. Plain text; sent to gateway.chat()
    * with NO conversation context per the v0.41.23 threat model. */
   prompt_template: z.string().optional(),
@@ -88,7 +88,7 @@ const ExtractableSpecSchema = z.object({
    * code. Validated as relative + within-pack at parse; REFUSES at runtime
    * in v0.41.23 with paste-ready hint. */
   verifier_path: z.string().optional(),
-}).strict();
+});
 
 export type ExtractableSpec = z.infer<typeof ExtractableSpecSchema>;
 
@@ -97,18 +97,18 @@ export type ExtractableSpec = z.infer<typeof ExtractableSpecSchema>;
  * when (a) frontmatter has a matching key+value, OR (b) the source path
  * matches the regex. ReDoS-guarded compile happens at pack-load (registry).
  */
-const SubtypeMatchSchema = z.object({
+const SubtypeMatchSchema = z.strictObject({
   name: z.string().min(1),
-  when: z.object({
+  when: z.strictObject({
     path_pattern: z.string().optional(),
     frontmatter_field: z.string().optional(),
     frontmatter_value: z.union([z.string(), z.number(), z.boolean()]).optional(),
-  }).strict(),
-}).strict();
+  }),
+});
 
 export type PackSubtypeMatch = z.infer<typeof SubtypeMatchSchema>;
 
-const PageTypeSchema = z.object({
+const PageTypeSchema = z.strictObject({
   name: z.string().min(1),
   primitive: PackPrimitiveEnum,
   /**
@@ -153,25 +153,25 @@ const PageTypeSchema = z.object({
    * declare it stay valid. Consumers MUST handle undefined via `?? []`.
    */
   subtypes: z.array(SubtypeMatchSchema).optional(),
-}).strict();
+});
 
-const FrontmatterLinkSchema = z.object({
+const FrontmatterLinkSchema = z.strictObject({
   page_type: z.string(),
   fields: z.array(z.string()).min(1),
   link_type: z.string(),
-}).strict();
+});
 
-const EnrichableSchema = z.object({
+const EnrichableSchema = z.strictObject({
   type: z.string(),
   rubric: z.string().optional(),
-}).strict();
+});
 
-const FilingRuleSchema = z.object({
+const FilingRuleSchema = z.strictObject({
   kind: z.string(),
   directory: z.string(),
   examples: z.array(z.string()).default([]),
   description: z.string().optional(),
-}).strict();
+});
 
 /**
  * v0.41 T3 — closed registry of calibration aggregator algorithms.
@@ -227,11 +227,11 @@ const AggregatorKindSchema = z.enum(AGGREGATOR_KINDS);
  * before any aggregator code runs. Unknown aggregator values fail the pack
  * load with a paste-ready `gbrain models doctor`-style hint.
  */
-const CalibrationDomainSchema = z.object({
+const CalibrationDomainSchema = z.strictObject({
   name: z.string().min(1).regex(/^[a-z][a-z0-9_]*$/, 'domain name must be lowercase snake_case'),
   aggregator: AggregatorKindSchema,
   page_types: z.array(z.string().min(1)).min(1),
-}).strict();
+});
 
 export type CalibrationDomain = z.infer<typeof CalibrationDomainSchema>;
 
@@ -263,7 +263,7 @@ export type AllowedSubtypeField = typeof ALLOWED_SUBTYPE_FIELDS[number];
  *     slug_aliases table rows + soft-delete the source page. NO inbound
  *     link rewrite (D15: alias-table IS the resolver).
  */
-const RetypeMappingRuleSchema = z.object({
+const RetypeMappingRuleSchema = z.strictObject({
   kind: z.literal('retype'),
   from_type: z.string().min(1),
   to_type: z.string().min(1),
@@ -271,17 +271,17 @@ const RetypeMappingRuleSchema = z.object({
   subtype_field: z.enum(ALLOWED_SUBTYPE_FIELDS).default('subtype'),
   path_filter: z.string().optional(),
   slug_filter: z.string().optional(),
-}).strict();
+});
 
 const ResolverSchema = z.union([
   z.literal('frontmatter'),
   z.literal('body_first_link'),
   z.literal('slug'),
   z.literal('body_excerpt'),
-  z.object({ frontmatter_field: z.string().min(1) }).strict(),
+  z.strictObject({ frontmatter_field: z.string().min(1) }),
 ]);
 
-const PageToLinkMappingRuleSchema = z.object({
+const PageToLinkMappingRuleSchema = z.strictObject({
   kind: z.literal('page_to_link'),
   from_type: z.string().min(1),
   link_type: z.string().min(1),
@@ -289,15 +289,15 @@ const PageToLinkMappingRuleSchema = z.object({
   target_slug_from: ResolverSchema,
   inverse: z.string().optional(),
   preserve_notes: z.boolean().optional(),
-}).strict();
+});
 
-const PageToAliasMappingRuleSchema = z.object({
+const PageToAliasMappingRuleSchema = z.strictObject({
   kind: z.literal('page_to_alias'),
   from_type: z.string().min(1),
   canonical_from: ResolverSchema,
   alias_slug_from: ResolverSchema,
   notes_from: ResolverSchema.optional(),
-}).strict();
+});
 
 const MappingRuleSchema = z.discriminatedUnion('kind', [
   RetypeMappingRuleSchema,
@@ -318,10 +318,10 @@ export type PackResolverSpec = z.infer<typeof ResolverSchema>;
  * active pack matches the (pack, semver-range) tuple. Version supports
  * `M.x` / `M.m.x` shorthand or an exact `M.m.p` literal.
  */
-const MigrationFromSchema = z.object({
+const MigrationFromSchema = z.strictObject({
   pack: z.string().min(1),
   version: z.string().min(1),
-}).strict();
+});
 
 export type PackMigrationFrom = z.infer<typeof MigrationFromSchema>;
 
@@ -330,7 +330,7 @@ export type PackMigrationFrom = z.infer<typeof MigrationFromSchema>;
  * `extends` resolution + closure expansion are done by registry.ts, not at
  * parse time.
  */
-export const SchemaPackManifestSchema = z.object({
+export const SchemaPackManifestSchema = z.strictObject({
   api_version: z.literal(SCHEMA_PACK_API_VERSION),
   name: z.string().min(1).regex(/^[a-z0-9._-]+$/, 'pack name must be lowercase slug-shape'),
   version: z.string().regex(/^\d+\.\d+\.\d+$/, 'version must be semver M.m.p'),
@@ -343,11 +343,11 @@ export const SchemaPackManifestSchema = z.object({
   /** Parent pack (one of: 'gbrain-base', another installed pack name, or null for full override). */
   extends: z.string().nullable().default('gbrain-base'),
   /** v0.38 — selective borrow of types/link_types from another pack. */
-  borrow_from: z.array(z.object({
+  borrow_from: z.array(z.strictObject({
     pack: z.string(),
     types: z.array(z.string()).optional(),
     link_types: z.array(z.string()).optional(),
-  }).strict()).default([]),
+  })).default([]),
   page_types: z.array(PageTypeSchema).default([]),
   link_types: z.array(LinkTypeSchema).default([]),
   frontmatter_links: z.array(FrontmatterLinkSchema).default([]),
@@ -398,7 +398,7 @@ export const SchemaPackManifestSchema = z.object({
    *   - Cycles between retype rules rejected (e.g. A→B + B→A)
    */
   mapping_rules: z.array(MappingRuleSchema).optional(),
-}).strict();
+});
 
 export type SchemaPackManifest = z.infer<typeof SchemaPackManifestSchema>;
 export type PackPageType = z.infer<typeof PageTypeSchema>;
