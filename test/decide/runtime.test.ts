@@ -154,7 +154,7 @@ describe('runner', () => {
     __setChatTransportForTests(async () => ({
       text: JSON.stringify({ answers: { p: { type: 'noul', noul: 0.2 } } }), blocks: [], stopReason: 'end',
       usage: { input_tokens: 10, output_tokens: 5, cache_read_tokens: 0, cache_creation_tokens: 0 },
-      model: 'openai:gpt-4o-mini', responseModel: 'gpt-4o-mini-2024-07-18', providerId: 'openai',
+      model: 'openai:gpt-4o-mini', responseModel: 'gpt-6-luna', providerId: 'openai',
     }) as never);
     configureGateway({ env: { TYPESAFE_API_KEY: 'sk-test', OPENAI_API_KEY: 'sk-test' } });
     const r = await runDecide({ slot: 'evidence', callSite: 'search', state: STATE, questions: [q('w', cand('notes/world')), q('p', cand('notes/private'))] },
@@ -162,7 +162,7 @@ describe('runner', () => {
     expect(Object.keys(r.answers)).toEqual(['w']);
     expect(r.refused).toEqual({ p: 'egress_private_denied' });
     expect(r.fallback?.answers.p).toEqual({ kind: 'noul', p: 0.2 });
-    expect(r.fallback?.model_resolved).toBe('gpt-4o-mini-2024-07-18');
+    expect(r.fallback?.model_resolved).toBe('gpt-6-luna');
     expect(r.fallback?.decision_id).not.toBe(r.decision_id);
     expect(JSON.stringify(bodies)).not.toContain('notes/private');
   });

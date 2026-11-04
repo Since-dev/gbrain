@@ -123,7 +123,7 @@ function judgeClient(
     const res: ChatResult = {
       text: v, blocks: [{ type: 'text', text: v }], stopReason: 'end',
       usage: { ...usage, cache_read_tokens: 0, cache_creation_tokens: 0 },
-      model: opts.model ?? '', providerId: 'openai', responseModel: 'gpt-4o-2024-08-06',
+      model: opts.model ?? '', providerId: 'openai', responseModel: 'gpt-6-luna',
     };
     return res;
   };
@@ -189,7 +189,7 @@ describe('--judge live run + --judge --resume-from backfill', () => {
       expect(row.error).toBeUndefined();
     }
     expect(new Set(rows.map(x => x.judge_config_hash)).size).toBe(1);
-    expect(r['mc-1'].judge_model_snapshot).toBe('gpt-4o-2024-08-06');
+    expect(r['mc-1'].judge_model_snapshot).toBe('gpt-6-luna');
     expect(r['mc-1'].judge_cost_usd).toBeGreaterThan(0);
     expect(r['mc-3_abs'].judge_cost_usd).toBe(0); // threw before any usage
     expect(r['mc-3_abs'].judge_prompt_kind).toBe('abstention');
