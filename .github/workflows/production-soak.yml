@@ -74,7 +74,7 @@ jobs:
       matrix:
         rtt: ${{ fromJSON(needs.plan.outputs.rtts) }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - name: Bootstrap (Docker images, bun, frozen dependencies)
         timeout-minutes: 20
         run: bash scripts/bench/production-soak/vm-setup.sh
@@ -92,7 +92,7 @@ jobs:
         run: docker rm -f soak-pg soak-bouncer-session soak-bouncer-txn soak-toxiproxy >/dev/null 2>&1 || true
       - name: Upload the scoreboard, events and logs
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: production-soak-rtt${{ matrix.rtt }}
           path: ${{ runner.temp }}/soak-out

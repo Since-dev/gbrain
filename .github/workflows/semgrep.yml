@@ -34,7 +34,7 @@ jobs:
     container:
       image: semgrep/semgrep:1.170.0@sha256:c98f8829eea377274ee4b10656458b078b88232469b2ff913f091c2317347c9d
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           # Full history so --baseline-commit can diff against the PR base;
           # a shallow clone would not contain the base commit.
@@ -68,7 +68,7 @@ jobs:
     container:
       image: semgrep/semgrep:1.170.0@sha256:c98f8829eea377274ee4b10656458b078b88232469b2ff913f091c2317347c9d
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - name: Semgrep full-tree scan (report-only, SARIF)
         run: |
           semgrep scan --config p/default --config p/typescript --sarif-output=semgrep.sarif || true

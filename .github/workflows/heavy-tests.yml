@@ -68,11 +68,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -83,7 +83,7 @@ jobs:
       # The 10k graduation fixture is cached as a PGLite data-dir tarball keyed
       # by the fixture sources (scripts/persistence/graduation-fixture.ts
       # verifies its own key; a stale entry is rebuilt, never reused).
-      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.cache/gbrain-graduation-fixtures
           key: graduation-fixtures-${{ runner.os }}-${{ hashFiles('scripts/persistence/graduation-fixture.ts', 'scripts/persistence/history-fixture.ts', 'src/core/schema-migrations/**') }}
@@ -120,7 +120,7 @@ jobs:
           cp tests/heavy/rss-baseline.json heavy-artifacts/ 2>/dev/null || true
       - name: Upload heavy-test artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: heavy-tests-${{ github.run_id }}-${{ github.run_attempt }}
           path: heavy-artifacts/
@@ -170,13 +170,13 @@ jobs:
       CODEX_NPM_VERSION: "0.147.0"
       CLAUDE_NPM_VERSION: "2.1.233"
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -281,13 +281,13 @@ jobs:
       HERMES_INSTALL_SHA256: "5854b15670b51a8daae8f59ddfa917062de9f74be261eb73b4b8d719710f8968"
       GBRAIN_REAL_HERMES_E2E: '1'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -472,7 +472,7 @@ jobs:
           fi
       - name: Upload hermes door evidence
         if: failure() && env.GBRAIN_E2E_EVIDENCE_DIR != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: hermes-door-evidence
           path: ${{ env.GBRAIN_E2E_EVIDENCE_DIR }}
@@ -533,13 +533,13 @@ jobs:
       GROK_NPM_LINUX_ARM64_INTEGRITY: "sha512-zGK42Eq3ZmIa7cSVnl6CiJ4cxTCMsNLQCmCoLJhy5eZXfAvZ1DA3K3HXmKCj4OScX8SalYlp7mx8HWl9Y6gytw=="
       GBRAIN_REAL_GROK_E2E: '1'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
-      - uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+      - uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: ~/.bun/install/cache
           key: bun-cache-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -715,7 +715,7 @@ jobs:
           fi
       - name: Upload grok door evidence
         if: failure() && env.GBRAIN_E2E_EVIDENCE_DIR != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: grok-door-evidence
           path: ${{ env.GBRAIN_E2E_EVIDENCE_DIR }}
@@ -761,7 +761,7 @@ jobs:
       CODEX_NPM_VERSION: "0.147.0"
       CLAUDE_NPM_VERSION: "2.1.233"
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
@@ -860,7 +860,7 @@ jobs:
       OPENCODE_NPM_LINUX_ARM64_INTEGRITY: "sha512-e8D3g0qJEIzawEg2+ygW3vkZjAYL2ssyAx4GbihjwXwZFvlZZy5zRWWzdz5KLBoHSTl0FB73vNtnNeXONyHpVQ=="
       GBRAIN_REAL_OPENCODE_E2E: '1'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
@@ -1050,7 +1050,7 @@ jobs:
           fi
       - name: Upload opencode door evidence
         if: failure() && env.GBRAIN_E2E_EVIDENCE_DIR != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6
         with:
           name: opencode-door-${{ matrix.lane }}-evidence
           path: ${{ env.GBRAIN_E2E_EVIDENCE_DIR }}
@@ -1089,7 +1089,7 @@ jobs:
       # Deliberately NO OPENCODE_VERSION pin: T1 asserts the bare-semver
       # SHAPE only, and the suite runs against whatever `latest` is today.
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
         with:
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2

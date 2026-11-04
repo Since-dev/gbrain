@@ -32,7 +32,7 @@ jobs:
     runs-on: ubicloud-standard-4-ubuntu-2404
     timeout-minutes: ${{ inputs.runs && inputs.runs != '1' && 240 || 60 }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2
         with:
           bun-version: 1.4.4
@@ -68,7 +68,7 @@ jobs:
           docker rm -f gbrain-bench-pg gbrain-bench-toxiproxy >/dev/null 2>&1 || true
       - name: Upload the per-cell results and logs
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: sync-freshness-gate
           path: |
