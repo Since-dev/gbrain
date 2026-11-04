@@ -1532,7 +1532,7 @@ function instantiateEmbedding(recipe: Recipe, modelId: string, cfg: AIGatewayCon
         ...(fetchWrapper ? { fetch: fetchWrapper } : {}),
         ...auth,
       });
-      return client.textEmbeddingModel(modelId);
+      return client.embeddingModel(modelId);
     }
     default:
       throw new AIConfigError(`Unknown implementation: ${(recipe as any).implementation}`);
