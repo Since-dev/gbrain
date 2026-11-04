@@ -112,18 +112,21 @@ async function transcribeFile(
   apiKey: string,
   config: TranscriptionConfig,
 ): Promise<TranscriptionResult> {
-  const model = config.model || (provider === 'groq' ? 'whisper-large-v3' : 'whisper-1');
+  const model = config.model || (provider === 'groq' ? 'whisper-large-v3' : 'gpt-transcribe');
   const baseUrl = provider === 'groq'
     ? 'https://api.groq.com/openai/v1'
     : 'https://api.openai.com/v1';
+  // gpt-transcribe returns JSON ({ text, languages }) and takes a `languages`
+  // array in place of the singular `language` field (never both).
+  const usesLanguages = model === 'gpt-transcribe';
 
   // Both Groq and OpenAI use the same API format
   const fileData = readFileSync(audioPath);
   const formData = new FormData();
   formData.append('file', new Blob([fileData]), basename(audioPath));
   formData.append('model', model);
-  formData.append('response_format', 'verbose_json');
-  if (config.language) formData.append('language', config.language);
+  formData.append('response_format', usesLanguages ? 'json' : 'verbose_json');
+  if (config.language) formData.append(usesLanguages ? 'languages[]' : 'language', config.language);
 
   const response = await invokeAI({ operation: 'transcription', kind: 'transcription', model: `${provider}:${model}` },
     () => fetch(`${baseUrl}/audio/transcriptions`, {
@@ -146,8 +149,8 @@ async function transcribeFile(
       end: s.end || 0,
       text: s.text || '',
     })),
-    language: data.language || config.language || 'unknown',
-    duration: data.duration || 0,
+    language: data.language || data.languages?.[0]?.code || config.language || 'unknown',
+    duration: data.duration || (data.usage?.type === 'duration' ? data.usage.seconds : 0) || 0,
     provider,
   };
 }

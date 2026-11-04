@@ -56,10 +56,10 @@ describe('splitProviderModelId', () => {
       });
     });
 
-    test('slash-separated openrouter form openai/gpt-5', () => {
-      expect(splitProviderModelId('openai/gpt-5')).toEqual({
+    test('slash-separated openrouter form openai/gpt-5.6-sol', () => {
+      expect(splitProviderModelId('openai/gpt-5.6-sol')).toEqual({
         provider: 'openai',
-        model: 'gpt-5',
+        model: 'gpt-5.6-sol',
       });
     });
   });
@@ -164,7 +164,7 @@ describe('normalizeModelId (#1698)', () => {
   });
 
   test('non-anthropic bare with custom default provider', () => {
-    expect(normalizeModelId('gpt-5', 'openai')).toBe('openai:gpt-5');
+    expect(normalizeModelId('gpt-5.6-sol', 'openai')).toBe('openai:gpt-5.6-sol');
   });
 
   test('empty / whitespace returns input as-is (downstream throws loudly)', () => {

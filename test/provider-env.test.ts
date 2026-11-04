@@ -22,7 +22,7 @@ describe('mergedProviderEnv', () => {
       google_api_key: 'gg',
       azure_openai_api_key: 'az-secret',
       azure_openai_endpoint: 'https://x.openai.azure.com',
-      azure_openai_deployment: 'gpt-5',
+      azure_openai_deployment: 'gpt-5.6-sol',
       azure_openai_use_entra: '1',
     }), {});
     expect(env.OPENAI_API_KEY).toBe('sk-o');
@@ -36,7 +36,7 @@ describe('mergedProviderEnv', () => {
     // config.json looked complete while every keyless-shell embed failed auth.
     expect(env.AZURE_OPENAI_API_KEY).toBe('az-secret');
     expect(env.AZURE_OPENAI_ENDPOINT).toBe('https://x.openai.azure.com');
-    expect(env.AZURE_OPENAI_DEPLOYMENT).toBe('gpt-5');
+    expect(env.AZURE_OPENAI_DEPLOYMENT).toBe('gpt-5.6-sol');
     expect(env.AZURE_OPENAI_USE_ENTRA).toBe('1');
   });
 

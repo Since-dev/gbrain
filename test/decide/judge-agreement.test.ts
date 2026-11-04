@@ -79,8 +79,8 @@ describe('input parsing', () => {
   test('longmemeval: judged rows become items; judge errors, budget skips, unjudged and summary lines are skipped', () => {
     const path = join(dir, 'lme.jsonl');
     writeFileSync(path, [
-      { question_id: 'q1', question_type: 'temporal-reasoning', question: 'When?', answer: 'May', hypothesis: 'In May', judge_correct: true, judge_model: 'gpt-4o-2024-08-06' },
-      { question_id: 'q2', question_type: 'multi-session', question: 'Who?', answer: 42, hypothesis: '41', judge_correct: false, judge_model: 'gpt-4o-2024-08-06' },
+      { question_id: 'q1', question_type: 'temporal-reasoning', question: 'When?', answer: 'May', hypothesis: 'In May', judge_correct: true, judge_model: 'gpt-6-luna' },
+      { question_id: 'q2', question_type: 'multi-session', question: 'Who?', answer: 42, hypothesis: '41', judge_correct: false, judge_model: 'gpt-6-luna' },
       { question_id: 'q3', question: 'x', answer: 'y', hypothesis: 'z', judge_error: 'timeout' },
       { question_id: 'q4', question: 'x', answer: 'y', hypothesis: 'z', judge_skipped: 'budget' },
       { question_id: 'q5', question: 'x', answer: 'y', hypothesis: 'z' },
@@ -88,8 +88,8 @@ describe('input parsing', () => {
     ].map((r) => JSON.stringify(r)).join('\n') + '\n');
     const { items, skipped } = loadJudgeItems('longmemeval', path);
     expect(items.map((i) => [i.id, i.reference, i.slice, i.label_source])).toEqual([
-      ['q1', true, 'temporal-reasoning', 'llm:gpt-4o-2024-08-06'],
-      ['q2', false, 'multi-session', 'llm:gpt-4o-2024-08-06'],
+      ['q1', true, 'temporal-reasoning', 'llm:gpt-6-luna'],
+      ['q2', false, 'multi-session', 'llm:gpt-6-luna'],
     ]);
     expect(skipped).toEqual({ judge_error: 1, judge_skipped: 1, unjudged: 1 });
     expect(items[1]!.question.inputs!.answer!.text).toBe('42');
